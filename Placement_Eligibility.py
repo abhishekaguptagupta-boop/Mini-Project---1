@@ -211,28 +211,27 @@ class DatabaseHandler:
             port=self.port
         )
         self.cursor = self.conn.cursor()
-    
+
     def execute_query(self, query):
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
         columns = [desc[0] for desc in self.cursor.description]
         return pd.DataFrame(rows, columns=columns)
-    
+
     def close(self):
         if self.cursor:
             self.cursor.close()
         if self.conn:
             self.conn.close()
 
-
 # ------------------------ SIDEBAR NAVIGATION ------------------------ #
-st.navigation_bar = st.sidebar.radio(
+selected_page = st.sidebar.radio(
     "Navigation",
     ["Introduction", "Students Insights", "Eligibility Calculation", "Creator Info"]
 )
 
 # ------------------------ INTRODUCTION ------------------------ #
-if st.navigation_bar == "Introduction":
+if selected_page == "Introduction":
     st.markdown("""
 # 🎓 Student Placement Eligibility Application  
 
@@ -260,7 +259,7 @@ It is intended for **educational purposes only**.
 """, unsafe_allow_html=True)
 
 # ------------------------ STUDENTS INSIGHTS ------------------------ #
-elif st.navigation_bar == "Students Insights":
+elif selected_page == "Students Insights":
     st.title("📊 Students Insights")
     st.write("Insights from student database with dynamic visualizations.")
 
@@ -268,55 +267,112 @@ elif st.navigation_bar == "Students Insights":
         db = DatabaseHandler(password="Hope@3103")
         db.connect()
 
-        # SQL queries dictionary
+        # ------------------------ SQL QUERIES ------------------------ #
         queries = {
-            "Placement Status Count": """
+            "1. Placement Status Count": """
                 SELECT placement_status, COUNT(*) AS total_students
                 FROM placement_table
                 GROUP BY placement_status;
             """,
-            "Average Package by Batch": """
+            "2. Average Package by Batch": """
                 SELECT s.course_batch, ROUND(AVG(pl.placement_package),2) AS avg_package
                 FROM students_table s
                 JOIN placement_table pl ON s.student_id = pl.student_id
                 WHERE pl.placement_status='Placed'
                 GROUP BY s.course_batch;
             """,
-            "Gender-wise Placement": """
+            "3. Gender-wise Placement Count": """
                 SELECT s.gender, COUNT(*) AS total,
                        SUM(CASE WHEN pl.placement_status='Placed' THEN 1 ELSE 0 END) AS placed_students
                 FROM students_table s
                 JOIN placement_table pl ON s.student_id = pl.student_id
                 GROUP BY s.gender;
+            """,
+            "4. Average Age by Course": """
+                SELECT course_batch, ROUND(AVG(age),2) AS avg_age
+                FROM students_table
+                GROUP BY course_batch;
+            """,
+            "5. Students per City": """
+                SELECT city, COUNT(*) AS total_students
+                FROM students_table
+                GROUP BY city
+                ORDER BY total_students DESC
+                LIMIT 10;
+            """,
+            "6. Top 5 Students by Programming Problems Solved": """
+                SELECT s.name, p.problems_solved
+                FROM students_table s
+                JOIN programming_table p ON s.student_id = p.student_id
+                ORDER BY p.problems_solved DESC
+                LIMIT 5;
+            """,
+            "7. Average Soft Skills Score by Batch": """
+                SELECT s.course_batch,
+                       ROUND(AVG((ss.communication_skills + ss.teamwork_skills + ss.presentation_skills + 
+                       ss.leadership_skills + ss.critical_thinking + ss.interpersonal_skills)/6),2) AS avg_soft_skills
+                FROM students_table s
+                JOIN soft_skills_table ss ON s.student_id = ss.student_id
+                GROUP BY s.course_batch;
+            """,
+            "8. Students with Maximum Internships Completed": """
+                SELECT s.name, pl.internships_completed
+                FROM students_table s
+                JOIN placement_table pl ON s.student_id = pl.student_id
+                ORDER BY pl.internships_completed DESC
+                LIMIT 5;
+            """,
+            "9. Placement Package Distribution": """
+                SELECT placement_package, COUNT(*) AS students_count
+                FROM placement_table
+                WHERE placement_status='Placed'
+                GROUP BY placement_package
+                ORDER BY placement_package;
+            """,
+            "10. Students Not Placed by Batch": """
+                SELECT s.course_batch, COUNT(*) AS not_placed
+                FROM students_table s
+                JOIN placement_table pl ON s.student_id = pl.student_id
+                WHERE pl.placement_status='Not Placed'
+                GROUP BY s.course_batch;
             """
         }
 
+        # ------------------------ SELECT QUERY ------------------------ #
         selected_query = st.selectbox("Select Insight", list(queries.keys()))
         df = db.execute_query(queries[selected_query])
         st.subheader(selected_query)
         st.dataframe(df)
 
         # ------------------------ VISUALIZATIONS ------------------------ #
-        if selected_query == "Placement Status Count":
+        if selected_query in ["1. Placement Status Count", "10. Students Not Placed by Batch"]:
             fig, ax = plt.subplots()
-            ax.bar(df['placement_status'], df['total_students'], color=['green','red'])
-            ax.set_xlabel("Placement Status")
+            ax.bar(df.iloc[:,0], df.iloc[:,1], color='skyblue')
+            ax.set_xlabel(df.columns[0])
+            ax.set_ylabel(df.columns[1])
+            ax.set_title(selected_query)
+            st.pyplot(fig)
+
+        elif selected_query in ["2. Average Package by Batch", "4. Average Age by Course", "7. Average Soft Skills Score by Batch"]:
+            fig, ax = plt.subplots()
+            ax.bar(df.iloc[:,0], df.iloc[:,1], color='lightgreen')
+            ax.set_xlabel(df.columns[0])
+            ax.set_ylabel(df.columns[1])
+            ax.set_title(selected_query)
+            st.pyplot(fig)
+
+        elif selected_query in ["3. Gender-wise Placement Count", "5. Students per City", "6. Top 5 Students by Programming Problems Solved", "8. Students with Maximum Internships Completed"]:
+            fig, ax = plt.subplots()
+            df.plot(kind='bar', x=df.columns[0], y=df.columns[1:], ax=ax)
+            ax.set_title(selected_query)
+            st.pyplot(fig)
+
+        elif selected_query == "9. Placement Package Distribution":
+            fig, ax = plt.subplots()
+            ax.hist(df['placement_package'], bins=10, color='orange', edgecolor='black')
+            ax.set_xlabel("Package")
             ax.set_ylabel("Number of Students")
-            ax.set_title("Placement Status Distribution")
-            st.pyplot(fig)
-
-        elif selected_query == "Average Package by Batch":
-            fig, ax = plt.subplots()
-            ax.bar(df['course_batch'], df['avg_package'], color='skyblue')
-            ax.set_xlabel("Batch")
-            ax.set_ylabel("Average Package")
-            ax.set_title("Average Placement Package by Batch")
-            st.pyplot(fig)
-
-        elif selected_query == "Gender-wise Placement":
-            fig, ax = plt.subplots()
-            df.plot(kind='bar', x='gender', y=['total','placed_students'], ax=ax)
-            ax.set_title("Gender-wise Placement Count")
+            ax.set_title("Placement Package Distribution")
             st.pyplot(fig)
 
         db.close()
@@ -325,7 +381,7 @@ elif st.navigation_bar == "Students Insights":
         st.error(f"Database Error: {err}")
 
 # ------------------------ ELIGIBILITY CALCULATION ------------------------ #
-elif st.navigation_bar == "Eligibility Calculation":
+elif selected_page == "Eligibility Calculation":
     st.title("🧮 Eligibility Calculation")
     st.markdown("Input your academic and skill scores to calculate placement eligibility.")
 
@@ -358,13 +414,13 @@ elif st.navigation_bar == "Eligibility Calculation":
         submitted = st.form_submit_button("Calculate Eligibility")
 
     if submitted:
-        # Raw scoring formula
         raw_score = (
             programming_problems_solved*0.05 +
             assessments_completed*0.05 +
             mini_projects_completed*0.05 +
             certifications_earned*0.05 +
-            ((communication_skills + teamwork_skills + presentation_skills + leadership_skills + critical_thinking + interpersonal_skills)/60)*20 +
+            ((communication_skills + teamwork_skills + presentation_skills +
+             leadership_skills + critical_thinking + interpersonal_skills)/60)*20 +
             mock_interview_score*0.1 +
             internships_completed*0.1
         )
@@ -381,7 +437,7 @@ elif st.navigation_bar == "Eligibility Calculation":
             st.error("❌ Low chance currently. Focus on skill enhancement.")
 
 # ------------------------ CREATOR INFO ------------------------ #
-elif st.navigation_bar == "Creator Info":
+elif selected_page == "Creator Info":
     st.title("👨‍💻 Creator Information")
     st.markdown("""
     ## 📌 About the Creator  
