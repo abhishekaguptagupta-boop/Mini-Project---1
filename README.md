@@ -1,50 +1,105 @@
 # Mini-Project---1
 Application to check the eligibility of candidates for placement.
-# 🎓 Student Placement Eligibility Application
+🎓 Student Placement Eligibility & Insights Application
+📌 Project Overview
 
-## Overview
-The **Student Placement Predicition Application** is a web-based tool built with **Streamlit**, **Python**, and **MySQL** to help students assess their eligibility for campus placements based on academic scores, skill assessments, and other placement-related data.  
-It also provides dynamic insights and visualizations from the student database.
+The Student Placement Eligibility & Insights Application is a data-driven web application designed to help students and academic institutions evaluate placement readiness using academic performance, technical skills, and soft skills.
 
----
+The application also provides SQL-based insights from placement data stored in a MySQL database, enabling institutions to analyze trends, outcomes, and performance metrics.
 
-## Features
+👨‍💻 Author
 
-### 1. Introduction
-- Learn about the application and its functionalities.
-- Step-by-step guide to calculate eligibility.
-- Educational purposes only; placement is not guaranteed.
+Abhishek Gupta
+Developer & Data Enthusiast
 
-### 2. Students Insights
-- 10 dynamic SQL-based insights:
-  1. Placement Status Count
-  2. Average Package by Batch
-  3. Gender-wise Placement Count
-  4. Average Age by Course
-  5. Students per City (Top 10)
-  6. Top 5 Students by Programming Problems Solved
-  7. Average Soft Skills Score by Batch
-  8. Students with Maximum Internships Completed
-  9. Placement Package Distribution
-  10. Students Not Placed by Batch
-- Visualizations: bar charts, histograms, and tables.
+🛠️ Tech Stack
 
-### 3. Eligibility Calculation
-- Input your academic scores:
-  - 12th Grade %
-  - Graduation %
-  - Certifications Earned
-  - Programming Problems Solved
-  - Assessments Completed
-  - Mini Projects Completed
-- Input skill assessment scores:
-  - Communication, Teamwork, Presentation
-  - Leadership, Critical Thinking, Interpersonal Skills
-- Mock Interview Score & Internships Completed
-- Calculate your **eligibility score** (0–100) with recommendations.
+Programming Language: Python
 
-### 4. Creator Info
-- Developer: **Abhishek Gupta**
-- Email: **support@collegeplacements.com**
-- Built using Python, Streamlit, MySQL, and OOP principles.
+Web Framework: Streamlit
 
+Database: MySQL
+
+Libraries:
+
+Pandas
+
+Matplotlib
+
+Faker
+
+mysql-connector-python
+
+Concepts Used:
+
+SQL (Joins, Aggregations, Group By)
+
+Object-Oriented Programming (OOP)
+
+Data Visualization
+
+Environment Variables for Security
+
+🎯 Project Objectives
+
+Evaluate student placement readiness using a custom eligibility score
+
+Generate and manage structured student placement data
+
+Perform SQL-based analysis for placement insights
+
+Visualize placement trends using charts
+
+Follow secure coding practices using environment variables
+
+🗂️ Database Design
+
+The application uses a relational database named student_db consisting of four tables:
+
+1️⃣ students_table
+
+Stores demographic and academic details of students.
+
+2️⃣ programming_table
+
+Stores technical skill metrics such as:
+
+Problems solved
+
+Assessments completed
+
+Mini projects
+
+Certifications
+
+3️⃣ soft_skills_table
+
+Stores soft skill ratings:
+
+Communication
+
+Teamwork
+
+Presentation
+
+Leadership
+
+Critical Thinking
+
+Interpersonal Skills
+
+4️⃣ placement_table
+
+Stores placement outcomes:
+
+Placement status
+
+Company name
+
+Package offered
+
+Internships completed
+
+Interview scores
+
+All tables are linked using student_id as a foreign key.
