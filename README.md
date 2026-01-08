@@ -53,15 +53,15 @@ placement_table
 
 🧮 **Eligibility Calculation**
 
-Users input:
+**Users input:**
 
-12th Grade Percentage
-Programming Problems Solved
-Graduation Percentage
-Assessments Completed
-Certifications Earned
-Mini Projects Completed
-Skill Assesments Scores
+12th Grade Percentage,
+Programming Problems Solved,
+Graduation Percentage,
+Assessments Completed,
+Certifications Earned,
+Mini Projects Completed,
+Skill Assesments Scores etc.
 
 The app categorizes readiness as:
 
