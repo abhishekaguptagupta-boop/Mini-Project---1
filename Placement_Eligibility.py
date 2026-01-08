@@ -366,48 +366,62 @@ elif selected_page == "Students Insights":
 # ============================================================
 
 elif selected_page == "Eligibility Calculation":
-    st.title("🧮 Eligibility Calculator")
+    st.title("🧮 Eligibility Calculation")
 
+    st.markdown("""
+This section allows you to input your academic and skill data to calculate your eligibility score for campus placements.
+""")
+    
     with st.form("eligibility_form"):
-        problems = st.number_input("Problems Solved", 0)
-        assessments = st.number_input("Assessments Completed", 0)
-        projects = st.number_input("Mini Projects", 0)
-        certifications = st.number_input("Certifications", 0)
+        st.subheader("Academic Scores")
+        academic_col1, academic_col2 = st.columns(2)
+        with academic_col1:
+            twelfth_percentage = st.number_input("12th Grade Percentage", min_value=0.0, max_value=100.0, step=0.1)
+            graduation_percentage = st.number_input("Graduation Percentage", min_value=0.0, max_value=100.0, step=0.1)
+            certifications_earned = st.number_input("Certifications Earned", min_value=0, step=1)        
+        with academic_col2:
+            programming_problems_solved = st.number_input("Programming Problems Solved", min_value=0, step=1)
+            assessments_completed = st.number_input("Assessments Completed", min_value=0, step=1)
+            mini_projects_completed = st.number_input("Mini Projects Completed", min_value=0, step=1)
+            
+        st.subheader("Skill Assessments")
+        skills_col1, skills_col2 = st.columns(2)
+        with skills_col1:
+            communication_skills = st.slider("Communication Skills (1-10)", 1, 10, 5)
+            teamwork_skills = st.slider("Teamwork Skills (1-10)", 1, 10, 5)
+            presentation_skills = st.slider("Presentation Skills (1-10)", 1, 10, 5)
+        with skills_col2:
+            leadership_skills = st.slider("Leadership Skills (1-10)", 1, 10, 5)
+            critical_thinking = st.slider("Critical Thinking (1-10)", 1, 10, 5)
+            interpersonal_skills = st.slider("Interpersonal Skills (1-10)", 1, 10, 5)
 
-        communication = st.slider("Communication Skills", 1, 10, 5)
-        teamwork = st.slider("Teamwork Skills", 1, 10, 5)
-        presentation = st.slider("Presentation Skills", 1, 10, 5)
-        leadership = st.slider("Leadership Skills", 1, 10, 5)
-        critical = st.slider("Critical Thinking", 1, 10, 5)
-        interpersonal = st.slider("Interpersonal Skills", 1, 10, 5)
+        mock_interview_score = st.slider("Mock Interview Score (0-10)", 0, 10, 5)
+        internships_completed = st.number_input("Internships Completed", min_value=0, step=1)
 
-        mock = st.slider("Mock Interview Score", 0, 10, 5)
-        internships = st.number_input("Internships Completed", 0)
-
-        submitted = st.form_submit_button("Calculate")
+        submitted = st.form_submit_button("Calculate Eligibility")
 
     if submitted:
-        score = (
-            problems * 0.05 +
-            assessments * 0.05 +
-            projects * 0.05 +
-            certifications * 0.05 +
-            ((communication + teamwork + presentation +
-              leadership + critical + interpersonal) / 60) * 20 +
-            mock * 0.1 +
-            internships * 0.1
+        # Simple scoring algorithm
+        eligibility_score = (
+            (programming_problems_solved * 0.05) +
+            (assessments_completed * 0.05) +
+            (mini_projects_completed * 0.05) +
+            (certifications_earned * 0.05) +
+            ((communication_skills + teamwork_skills + presentation_skills + leadership_skills + critical_thinking + interpersonal_skills) / 60 * 20) +
+            (mock_interview_score * 0.1) +
+            (internships_completed * 0.1)
         )
 
-        eligibility = min(score * 2.5, 100)
+        st.subheader("Your Eligibility Score")
+        st.metric(label="Eligibility Score", value=f"{eligibility_score:.2f} / 100")
 
-        st.metric("Eligibility Score", f"{eligibility:.2f} / 100")
-
-        if eligibility >= 70:
-            st.success("High Placement Readiness")
-        elif eligibility >= 50:
-            st.warning("Moderate Readiness")
+        if eligibility_score >= 70:
+            st.success("✅ Congratulations! You are likely eligible for campus placements.")
+        elif eligibility_score >= 50:
+            st.warning("⚠️ You have a moderate chance of being eligible. Consider improving your skills.")
         else:
-            st.error("Low Readiness")
+            st.error("❌ You may not be eligible at this time. Focus on enhancing your skills and academics.")
+
 
 
 # ============================================================
