@@ -3,7 +3,7 @@ Application to check the eligibility of candidates for placement.
 # 🎓 Student Placement Eligibility Application
 
 ## Overview
-The **Student Placement Eligibility Application** is a web-based tool built with **Streamlit**, **Python**, and **MySQL** to help students assess their eligibility for campus placements based on academic scores, skill assessments, and other placement-related data.  
+The **Student Placement Predicition Application** is a web-based tool built with **Streamlit**, **Python**, and **MySQL** to help students assess their eligibility for campus placements based on academic scores, skill assessments, and other placement-related data.  
 It also provides dynamic insights and visualizations from the student database.
 
 ---
