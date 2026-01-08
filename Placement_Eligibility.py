@@ -229,12 +229,34 @@ selected_page = st.sidebar.radio(
 if selected_page == "Introduction":
     st.title("🎓 Student Placement Eligibility Application")
     st.markdown("""
-    This application analyzes student performance data to:
-    - Generate placement insights using SQL
-    - Visualize trends using charts
-    - Calculate placement eligibility scores
-    - Follow industry-grade security and OOP practices
-    """)
+    Welcome to the **Student Placement Prediction Application**!  
+This tool helps students understand their eligibility for **campus placements** based on academic and skill-based parameters.  
+
+---
+
+## ✨ Features
+- 📊 Input your **academic scores** and **skill assessments**.  
+- 🧮 Calculate your **eligibility score** for campus placements.  
+- 💡 Get **personalized insights** into areas of improvement.  
+
+---
+
+## 🛠️ How to Use
+1. Navigate to the **Eligibility Calculation** section using the navigation bar.  
+2. Fill in the required fields with your academic and skill data.  
+3. Click **Calculate Eligibility** to see your results.  
+
+---
+
+## ⚠️ Note
+This application uses a simple **scoring algorithm** and does **not guarantee placement**.  
+It is intended for **educational purposes only**.  
+
+---
+
+📧 For any questions or feedback, please contact us at:  
+**support@collegeplacements.com**
+""", unsafe_allow_html=True)
 
 
 # ============================================================
@@ -326,9 +348,15 @@ elif selected_page == "Students Insights":
 
     st.dataframe(df)
 
-    fig, ax = plt.subplots()
-    df.plot(kind="bar", x=df.columns[0], ax=ax)
-    st.pyplot(fig)
+    # ---------------- SAFE PLOTTING ----------------
+    numeric_cols = df.select_dtypes(include="number").columns.tolist()
+    if numeric_cols:
+        fig, ax = plt.subplots()
+        df.plot(kind="bar", x=df.columns[0], y=numeric_cols, ax=ax, legend=True)
+        ax.set_title(selected_query)
+        st.pyplot(fig)
+    else:
+        st.info("📌 No numeric data to plot for this selection.")
 
     db.close()
 
@@ -388,19 +416,10 @@ elif selected_page == "Eligibility Calculation":
 
 elif selected_page == "Creator Info":
     st.markdown("""
-    ### 👨‍💻 Creator
-    **Name:** Abhishek Gupta  
-    **Tech Stack:** Python, Streamlit, MySQL, SQL, OOP  
-    **Project Type:** Data Analytics + Placement Readiness App
-    """)
-
-
-
-
-
-
-
-
-
-
-
+    ## 📌 About the Creator  
+    - **Name:** Abhishek Gupta  
+    - **Role:** Developer & Data Enthusiast  
+    - **Email:** support@collegeplacements.com  
+    ---
+    💡 *This application was built using **Streamlit, MySQL, and Python** to help students analyze placement eligibility.*  
+    """, unsafe_allow_html=True)
