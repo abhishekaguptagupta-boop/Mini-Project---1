@@ -1,105 +1,70 @@
 # Mini-Project---1
 Application to check the eligibility of candidates for placement.
-🎓 Student Placement Eligibility & Insights Application
-📌 Project Overview
 
-The Student Placement Eligibility & Insights Application is a data-driven web application designed to help students and academic institutions evaluate placement readiness using academic performance, technical skills, and soft skills.
+**Student Placement Eligibility & Insights Application**
 
-The application also provides SQL-based insights from placement data stored in a MySQL database, enabling institutions to analyze trends, outcomes, and performance metrics.
+📌 **Overview**
 
-👨‍💻 Author
+The Student Placement Eligibility & Insights Application is a data-driven Streamlit web app that helps evaluate student placement readiness based on academic performance, technical skills, and soft skills.
+It also provides SQL-based placement insights using data stored in a MySQL database.
+
+👨‍💻 **Author**
 
 Abhishek Gupta
-Developer & Data Enthusiast
 
-🛠️ Tech Stack
+🛠️ **Tech Stack**
 
-Programming Language: Python
-
-Web Framework: Streamlit
-
-Database: MySQL
-
-Libraries:
-
+Python
+Streamlit
+MySQL
 Pandas
-
 Matplotlib
-
 Faker
+SQL & OOP Principles
 
-mysql-connector-python
+🎯 **Features**
 
-Concepts Used:
+🔐 Secure database access using environment variables
+📊 SQL-driven placement insights with visualizations
+🧮 Placement eligibility score (out of 100)
+📈 Safe plotting to avoid numeric data errors
+🧱 Object-Oriented database handling
 
-SQL (Joins, Aggregations, Group By)
+🗂️ **Database Tables**
+students_table
+programming_table
+soft_skills_table
+placement_table
+(All linked using student_id)
 
-Object-Oriented Programming (OOP)
+📊 **Students Insights (SQL Analysis)**
 
-Data Visualization
+1.	Placement Status Count
+2.	Average Package by Batch
+3.	Gender-wise Placement
+4.	Average Age by Batch
+5.	Top Cities by Students
+6.	Top Students by Problems Solved
+7.	Average Soft Skills by Batch
+8.	Top Internships Completed
+9.	Package Distribution
+10.	Not Placed by Batch
 
-Environment Variables for Security
 
-🎯 Project Objectives
+🧮 **Eligibility Calculation**
 
-Evaluate student placement readiness using a custom eligibility score
+Users input:
 
-Generate and manage structured student placement data
+12th Grade Percentage
+Programming Problems Solved
+Graduation Percentage
+Assessments Completed
+Certifications Earned
+Mini Projects Completed
+Skill Assesments Scores
 
-Perform SQL-based analysis for placement insights
+The app categorizes readiness as:
 
-Visualize placement trends using charts
-
-Follow secure coding practices using environment variables
-
-🗂️ Database Design
-
-The application uses a relational database named student_db consisting of four tables:
-
-1️⃣ students_table
-
-Stores demographic and academic details of students.
-
-2️⃣ programming_table
-
-Stores technical skill metrics such as:
-
-Problems solved
-
-Assessments completed
-
-Mini projects
-
-Certifications
-
-3️⃣ soft_skills_table
-
-Stores soft skill ratings:
-
-Communication
-
-Teamwork
-
-Presentation
-
-Leadership
-
-Critical Thinking
-
-Interpersonal Skills
-
-4️⃣ placement_table
-
-Stores placement outcomes:
-
-Placement status
-
-Company name
-
-Package offered
-
-Internships completed
-
-Interview scores
-
-All tables are linked using student_id as a foreign key.
+✅ Eligible
+⚠️ Moderate
+❌ Not Eligible
