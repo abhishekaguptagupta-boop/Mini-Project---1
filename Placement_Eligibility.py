@@ -402,15 +402,16 @@ This section allows you to input your academic and skill data to calculate your 
 
     if submitted:
         # Simple scoring algorithm
-        eligibility_score = (
-            (programming_problems_solved * 0.05) +
-            (assessments_completed * 0.05) +
-            (mini_projects_completed * 0.05) +
-            (certifications_earned * 0.05) +
-            ((communication_skills + teamwork_skills + presentation_skills + leadership_skills + critical_thinking + interpersonal_skills) / 60 * 20) +
-            (mock_interview_score * 0.1) +
-            (internships_completed * 0.1)
-        )
+        eligibility_score = min(100, (
+    (programming_problems_solved / 100) * 20 +
+    (assessments_completed / 50) * 10 +
+    (mini_projects_completed / 10) * 10 +
+    (certifications_earned / 5) * 10 +
+    ((communication_skills + teamwork_skills + presentation_skills +
+      leadership_skills + critical_thinking + interpersonal_skills) / 60) * 20 +
+    (mock_interview_score / 10) * 10 +
+    (internships_completed / 5) * 10
+))
 
         st.subheader("Your Eligibility Score")
         st.metric(label="Eligibility Score", value=f"{eligibility_score:.2f} / 100")
@@ -437,3 +438,4 @@ elif selected_page == "Creator Info":
     ---
     💡 *This application was built using **Streamlit, MySQL, and Python** to help students analyze placement eligibility.*  
     """, unsafe_allow_html=True)
+
