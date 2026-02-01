@@ -18,7 +18,6 @@ Python
 Streamlit
 MySQL
 Pandas
-Matplotlib
 Faker
 SQL & OOP Principles
 
